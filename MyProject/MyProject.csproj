@@ -146,16 +146,24 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="bin\Debug\image\calc.gif" />
+    <None Include="bin\Debug\image\calc.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="bin\Debug\image\drako.gif" />
+    <None Include="bin\Debug\image\drako.gif">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="bin\Debug\image\firstfunc.JPG" />
+    <None Include="bin\Debug\image\firstfunc.JPG">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="bin\Debug\image\secfunc.JPG" />
+    <None Include="bin\Debug\image\secfunc.JPG">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
