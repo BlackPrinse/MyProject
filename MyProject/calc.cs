@@ -285,6 +285,8 @@ namespace MyProject
                 l_calcText.Text = "Canceled!";
             }
 
+            MessageBox.Show(l_calcText.Text);
+
             CalcData.FirstExprArr = firstExprVal;
             CalcData.SecExprArr = secExprVal;
             CalcData.QValueArr = qArr;

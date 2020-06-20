@@ -186,12 +186,12 @@ namespace MyProject
 
             if (e.KeyChar == '.' || e.KeyChar == ',')
             {
-                e.KeyChar = separator;
+                e.KeyChar = '.';
             }
 
             if (e.KeyChar == separator)
             {
-                if (t2check.Text.IndexOf(separator) != -1)
+                if (t2check.Text.IndexOf('.') != -1)
                 {
                     e.Handled = true;
                 }
@@ -217,12 +217,12 @@ namespace MyProject
 
             if (e.KeyChar == '.' || e.KeyChar == ',')
             {
-                e.KeyChar = separator;
+                e.KeyChar = '.';
             }
 
             if (e.KeyChar == separator)
             {
-                if (t2check.Text.IndexOf(separator) != -1)
+                if (t2check.Text.IndexOf('.') != -1)
                 {
                     e.Handled = true;
                 }
@@ -376,7 +376,6 @@ namespace MyProject
                 return;
 
             string filename = saveFileDialog1.FileName;
-            MessageBox.Show(filename);
 
             var save = new SaveData();
             using (var stream = new FileStream(filename, FileMode.Create))
