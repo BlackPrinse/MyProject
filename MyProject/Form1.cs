@@ -16,12 +16,14 @@ namespace MyProject
     public partial class Form1 : Form
     {
         private const string APP_NAME = "My Program";
-        private readonly char separator = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator[0];
+        private char separator = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator[0];
+       
 
         public Form1()
         {
             InitializeComponent();
 
+            
             fontToolStripMenuItem.Click += fontToolStripMenuItem_Click;
             // расширенное окно для выбора цвета
             // добавляем возможность выбора цвета шрифта
@@ -41,8 +43,15 @@ namespace MyProject
 
         }
 
+        private async void getSep()
+        {
+            separator = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator[0];
+            MessageBox.Show($"{separator}");
+        }
+
         private void Form1_Load(object sender, EventArgs e)
         {
+            getSep();
             this.Text = APP_NAME;
             b_start_calc.Text = "Start calculating";
             t_xmin.Text = $"-5{separator}0";
@@ -154,13 +163,9 @@ namespace MyProject
                 }
             });
 
-            SaveData sata = new SaveData();
-            sata.Xmax = 10;
-            sata.Xmin = 20;
-
             if (!isFormOpened)
             {
-                calc cl = new calc(sata);
+                calc cl = new calc();
                 cl.ShowDialog();
             }
         }
@@ -183,6 +188,7 @@ namespace MyProject
 
         private void checkInputData(KeyPressEventArgs e, TextBox t2check, TextBox t2focus)
         {
+
             if (((e.KeyChar >= '0') && (e.KeyChar <= '9')) || e.KeyChar == '-')
             {
                 return;
@@ -214,6 +220,7 @@ namespace MyProject
         }
         private void checkInputData(KeyPressEventArgs e, TextBox t2check, Button bt)
         {
+
             if (((e.KeyChar >= '0') && (e.KeyChar <= '9')) || e.KeyChar == '-')
             {
                 return;
@@ -363,6 +370,7 @@ namespace MyProject
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
+
             l_firstFuncText.Visible = false;
             l_secFuncText.Visible = false;
             b_showFirstFuncGraph.Visible = false;

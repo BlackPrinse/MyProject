@@ -123,14 +123,14 @@
             // m_savetofile
             // 
             this.m_savetofile.Name = "m_savetofile";
-            this.m_savetofile.Size = new System.Drawing.Size(180, 22);
+            this.m_savetofile.Size = new System.Drawing.Size(148, 22);
             this.m_savetofile.Text = "Save as file";
             this.m_savetofile.Click += new System.EventHandler(this.m_savetofile_Click);
             // 
             // m_loadfromfile
             // 
             this.m_loadfromfile.Name = "m_loadfromfile";
-            this.m_loadfromfile.Size = new System.Drawing.Size(180, 22);
+            this.m_loadfromfile.Size = new System.Drawing.Size(148, 22);
             this.m_loadfromfile.Text = "Load from file";
             this.m_loadfromfile.Click += new System.EventHandler(this.m_loadfromfile_Click);
             // 
@@ -254,7 +254,7 @@
             // b_start_calc
             // 
             this.b_start_calc.Cursor = System.Windows.Forms.Cursors.AppStarting;
-            this.b_start_calc.Location = new System.Drawing.Point(132, 155);
+            this.b_start_calc.Location = new System.Drawing.Point(132, 168);
             this.b_start_calc.Name = "b_start_calc";
             this.b_start_calc.Size = new System.Drawing.Size(100, 32);
             this.b_start_calc.TabIndex = 7;
