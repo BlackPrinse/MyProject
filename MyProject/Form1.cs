@@ -154,9 +154,13 @@ namespace MyProject
                 }
             });
 
+            SaveData sata = new SaveData();
+            sata.Xmax = 10;
+            sata.Xmin = 20;
+
             if (!isFormOpened)
             {
-                calc cl = new calc();
+                calc cl = new calc(sata);
                 cl.ShowDialog();
             }
         }
@@ -186,12 +190,12 @@ namespace MyProject
 
             if (e.KeyChar == '.' || e.KeyChar == ',')
             {
-                e.KeyChar = '.';
+                e.KeyChar = separator;
             }
 
-            if (e.KeyChar == '.')
+            if (e.KeyChar == separator)
             {
-                if (t2check.Text.IndexOf('.') != -1)
+                if (t2check.Text.IndexOf(separator) != -1)
                 {
                     e.Handled = true;
                 }
@@ -217,12 +221,12 @@ namespace MyProject
 
             if (e.KeyChar == '.' || e.KeyChar == ',')
             {
-                e.KeyChar = '.';
+                e.KeyChar = separator;
             }
 
-            if (e.KeyChar == '.')
+            if (e.KeyChar == separator)
             {
-                if (t2check.Text.IndexOf('.') != -1)
+                if (t2check.Text.IndexOf(separator) != -1)
                 {
                     e.Handled = true;
                 }
@@ -376,6 +380,7 @@ namespace MyProject
                 return;
 
             string filename = saveFileDialog1.FileName;
+            MessageBox.Show(filename);
 
             var save = new SaveData();
             using (var stream = new FileStream(filename, FileMode.Create))

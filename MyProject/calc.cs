@@ -37,6 +37,13 @@ namespace MyProject
         {
             InitializeComponent();
         }
+        public calc(SaveData sata)
+        {
+            InitializeComponent();
+
+            MessageBox.Show(sata.Xmin.ToString() + sata.Xmax.ToString());
+
+        }
 
         private async void calc_Load(object sender, EventArgs e)
         {
