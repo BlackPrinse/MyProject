@@ -189,7 +189,7 @@ namespace MyProject
                 e.KeyChar = '.';
             }
 
-            if (e.KeyChar == separator)
+            if (e.KeyChar == '.')
             {
                 if (t2check.Text.IndexOf('.') != -1)
                 {
@@ -220,7 +220,7 @@ namespace MyProject
                 e.KeyChar = '.';
             }
 
-            if (e.KeyChar == separator)
+            if (e.KeyChar == '.')
             {
                 if (t2check.Text.IndexOf('.') != -1)
                 {
