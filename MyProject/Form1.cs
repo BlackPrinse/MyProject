@@ -416,7 +416,12 @@ namespace MyProject
             var secExpr = new Dictionary<double, double>();
 
             int countSExpr = 0, countFExpr = 0, countq = 0;
-            for (double xmin = upload.Xmin; upload.Xmin < upload.Xmax; upload.Xmin += upload.Dx)
+            Double xmin = upload.Xmin;
+            Double dx = upload.Dx;
+            Double xmax = upload.Xmax;
+
+
+            for (;xmin < xmax; xmin += dx)
             {
 
                 if (upload.QValueArr[countq] <= 0.25)
@@ -449,6 +454,11 @@ namespace MyProject
                 l_secFuncText.Items.Add(String.Format("x = {0:f2}, f(x) = {1:f2}", keyValue.Key, keyValue.Value));
             }
 
+            CalcData.FirstExpr = firstExpr;
+            CalcData.SecExpr = secExpr;
+            t_dx.Text = upload.Dx.ToString();
+            t_xmax.Text = upload.Xmax.ToString();
+            t_xmin.Text = upload.Xmin.ToString();
             l_firstFuncText.Visible = true;
             l_secFuncText.Visible = true;
             b_showFirstFuncGraph.Visible = true;

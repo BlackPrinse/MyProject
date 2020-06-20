@@ -124,14 +124,14 @@
             // 
             this.m_savetofile.Name = "m_savetofile";
             this.m_savetofile.Size = new System.Drawing.Size(180, 22);
-            this.m_savetofile.Text = "Download";
+            this.m_savetofile.Text = "Save as file";
             this.m_savetofile.Click += new System.EventHandler(this.m_savetofile_Click);
             // 
             // m_loadfromfile
             // 
             this.m_loadfromfile.Name = "m_loadfromfile";
             this.m_loadfromfile.Size = new System.Drawing.Size(180, 22);
-            this.m_loadfromfile.Text = "Upload";
+            this.m_loadfromfile.Text = "Load from file";
             this.m_loadfromfile.Click += new System.EventHandler(this.m_loadfromfile_Click);
             // 
             // optionsToolStripMenuItem
