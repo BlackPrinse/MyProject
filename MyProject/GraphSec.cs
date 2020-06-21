@@ -12,16 +12,22 @@ namespace MyProject
 {
     public partial class GraphSec : Form
     {
+        private Dictionary<double, double> secExpr;
         public GraphSec()
         {
             InitializeComponent();
+        }
+
+        public GraphSec(CalcDictTO data)
+        {
+            InitializeComponent();
+            secExpr = data.SecExpr;
         }
 
         private void GraphSec_Load(object sender, EventArgs e)
         {
             Text = "Second function";
             chart1.Series[0].Points.Clear();
-            var secExpr = CalcData.SecExpr; 
 
             if (secExpr.Count >= 10)
             {

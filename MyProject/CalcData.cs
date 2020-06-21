@@ -6,19 +6,49 @@ using System.Threading.Tasks;
 
 namespace MyProject
 {
-    static class CalcData
+    class CalcData
     {
-        public static double Xmin { get; set; }
-        public static double Xmax { get; set; }
-        public static double Dx { get; set; }
-        public static double TimeCount { get; set; }
+        public double Xmin { get; set; }
+        public double Xmax { get; set; }
+        public double Dx { get; set; }
+        public double TimeCount { get; set; }
 
-        public static Dictionary<double, double> FirstExpr;
-        public static Dictionary<double, double> SecExpr;
+        public Dictionary<double, double> FirstExpr;
+        public Dictionary<double, double> SecExpr;
 
 
-        public static double[] FirstExprArr { get; set; }
-        public static double[] SecExprArr { get; set; }
-        public static double[] QValueArr { get; set; }
+
+        public void setDict(CalcDictTO data)
+        {
+            FirstExpr = data.FirstExpr;
+            SecExpr = data.SecExpr;
+        }
+
+        public CalcDictTO getDict()
+        {
+            CalcDictTO data = new CalcDictTO();
+            data.FirstExpr = FirstExpr;
+            data.SecExpr = SecExpr;
+            return data;
+        }
+
+        public void setData(CalcTO data)
+        {
+            Xmin = data.Xmin;
+            Xmax = data.Xmax;
+            Dx = data.Dx;
+        }
+
+        public CalcTO getData()
+        {
+            CalcTO data = new CalcTO();
+
+            data.Xmin = Xmin;
+            data.Xmax = Xmax;
+            data.Dx = Dx;
+            return data;
+        }
+
+
     }
 }

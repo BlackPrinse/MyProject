@@ -16,10 +16,15 @@ namespace MyProject
         private Random _random = new Random();
         private readonly string IMAGE_FILE = $"{Environment.CurrentDirectory}\\image\\";
         private string FORM_NAME = "Calculating";
+        private double xmin;
+        private double xmax;
+        private double dx;
+        private Dictionary<double, double> firstExpr = new Dictionary<double, double>();
+        private Dictionary<double, double> secExpr = new Dictionary<double, double>();
 
-        private static bool isActiveCalc;
+        private bool isActiveCalc;
 
-        public static bool IsActiveCalc
+        public bool IsActiveCalc
         {
             get
             {
@@ -36,6 +41,22 @@ namespace MyProject
         public calc()
         {
             InitializeComponent();
+        }
+
+        public calc(CalcTO inputData)
+        {
+            InitializeComponent();
+
+            xmin = inputData.Xmin;
+            xmax = inputData.Xmax;
+            dx = inputData.Dx;
+        }
+        public CalcDictTO getDictTO()
+        {
+            var dict = new CalcDictTO();
+            dict.FirstExpr = firstExpr;
+            dict.SecExpr = secExpr;
+            return dict;
         }
         public calc(SaveData sata)
         {
@@ -57,12 +78,9 @@ namespace MyProject
             b_close.Enabled = false;
 
 
-            double xmin = CalcData.Xmin;
-            double xmax = CalcData.Xmax;
-            double dx = CalcData.Dx;
-
-            var firstExpr = new Dictionary<double, double>();
-            var secExpr = new Dictionary<double, double>();
+            //double xmin = CalcData.Xmin;
+            //double xmax = CalcData.Xmax;
+            //double dx = CalcData.Dx;
 
             double qvalue = _random.NextDouble();
             double res = (xmax - xmin) / dx;
@@ -293,14 +311,7 @@ namespace MyProject
             }
 
             MessageBox.Show(l_calcText.Text);
-
-            CalcData.FirstExprArr = firstExprVal;
-            CalcData.SecExprArr = secExprVal;
-            CalcData.QValueArr = qArr;
-            CalcData.FirstExpr = firstExpr;
-            CalcData.SecExpr = secExpr;
-
-        }
+        }  
 
         private void UpdataProgreeBar(int i)
         {
@@ -323,7 +334,7 @@ namespace MyProject
             Close();
         }
 
-        private async void b_cansel_Click(object sender, EventArgs e)
+        private void b_cansel_Click(object sender, EventArgs e)
         {
             if (check_Canseled == true)
             {
@@ -335,11 +346,11 @@ namespace MyProject
             }
         }
 
-        protected async override void OnClosing(CancelEventArgs e)
+        protected override void OnClosing(CancelEventArgs e)
         {
             base.OnClosing(e);
 
-            if (calc.IsActiveCalc)
+            if (IsActiveCalc)
             {
                 e.Cancel = true;
                 MessageBox.Show("Please wait until the calculation is completed");

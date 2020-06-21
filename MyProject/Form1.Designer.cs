@@ -32,7 +32,6 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.mainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.m_savetofile = new System.Windows.Forms.ToolStripMenuItem();
@@ -77,7 +76,7 @@
             this.aboutToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(632, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(246, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -85,7 +84,6 @@
             // 
             this.mainToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newToolStripMenuItem,
-            this.saveToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.mainToolStripMenuItem.Name = "mainToolStripMenuItem";
             this.mainToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
@@ -97,12 +95,6 @@
             this.newToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
             this.newToolStripMenuItem.Text = "New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
-            // 
-            // saveToolStripMenuItem
-            // 
-            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
-            this.saveToolStripMenuItem.Text = "Save";
             // 
             // exitToolStripMenuItem
             // 
@@ -228,6 +220,7 @@
             this.t_xmin.TextChanged += new System.EventHandler(this.t_xmin_TextChanged);
             this.t_xmin.KeyDown += new System.Windows.Forms.KeyEventHandler(this.t_xmin_KeyDown);
             this.t_xmin.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.t_xmin_KeyPress);
+            this.t_xmin.Leave += new System.EventHandler(this.t_xmin_Leave);
             // 
             // t_xmax
             // 
@@ -239,6 +232,7 @@
             this.t_xmax.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.t_xmax.TextChanged += new System.EventHandler(this.t_xmax_TextChanged);
             this.t_xmax.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.t_xmax_KeyPress);
+            this.t_xmax.Leave += new System.EventHandler(this.t_xmax_Leave);
             // 
             // t_dx
             // 
@@ -260,7 +254,7 @@
             this.b_start_calc.TabIndex = 7;
             this.b_start_calc.Text = "Start calculating";
             this.b_start_calc.UseVisualStyleBackColor = false;
-            this.b_start_calc.Click += new System.EventHandler(this.button1_Click);
+            this.b_start_calc.Click += new System.EventHandler(this.b_start_calc_Click);
             this.b_start_calc.MouseLeave += new System.EventHandler(this.b_start_calc_MouseLeave);
             this.b_start_calc.MouseHover += new System.EventHandler(this.b_start_calc_MouseHover);
             this.b_start_calc.MouseMove += new System.Windows.Forms.MouseEventHandler(this.b_start_calc_MouseMove);
@@ -350,7 +344,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(632, 267);
+            this.ClientSize = new System.Drawing.Size(246, 235);
             this.Controls.Add(this.p_f2);
             this.Controls.Add(this.p_f1);
             this.Controls.Add(this.b_showSecFuncGraph);
@@ -370,6 +364,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.Name = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = " ";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
@@ -387,7 +382,6 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem mainToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem m_savetofile;

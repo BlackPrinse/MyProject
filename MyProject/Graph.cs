@@ -12,23 +12,28 @@ namespace MyProject
 {
     public partial class Graph : Form
     {
+        private Dictionary<double, double> firstExpr;
+
         public Graph()
         {
             InitializeComponent();
+        }
+        public Graph(CalcDictTO data)
+        {
+            InitializeComponent();
+            firstExpr = data.FirstExpr;
         }
 
         private void Graph_Load(object sender, EventArgs e)
         {
             Text = "First function";
             chart1.Series[0].Points.Clear();
-            var firstExpr = CalcData.FirstExpr;
 
-            if ( firstExpr.Count >= 10)
+            if (firstExpr.Count >= 10)
             {
                 chart1.Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Spline;
             }
 
-            var secExpr = CalcData.SecExpr;
 
             foreach (KeyValuePair<double, double> keyValue in firstExpr)
             {

@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Xml.Serialization;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.IO;
 
 namespace MyProject
@@ -17,13 +19,14 @@ namespace MyProject
     {
         private const string APP_NAME = "My Program";
         private char separator = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator[0];
-       
+        private CalcData data = new CalcData();
+
 
         public Form1()
         {
             InitializeComponent();
 
-            
+
             fontToolStripMenuItem.Click += fontToolStripMenuItem_Click;
             // расширенное окно для выбора цвета
             // добавляем возможность выбора цвета шрифта
@@ -43,10 +46,26 @@ namespace MyProject
 
         }
 
-        private async void getSep()
+        private void getSep()
         {
             separator = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator[0];
-            MessageBox.Show($"{separator}");
+
+            try
+            {
+                string scheck = $"-5{separator}0";
+                double dcheck = Convert.ToDouble(scheck);
+            }
+            catch (Exception)
+            {
+                if (separator == '.')
+                {
+                    separator = ',';
+                }
+                else
+                {
+                    separator = '.';
+                }
+            }
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -80,24 +99,29 @@ namespace MyProject
             Close();
         }
 
-        private async void button1_Click(object sender, EventArgs e)
+        private void b_start_calc_Click(object sender, EventArgs e)
         {
             l_firstFuncText.Items.Clear();
             l_secFuncText.Items.Clear();
 
-            try
-            {
-                CalcData.Xmax = Convert.ToDouble(t_xmax.Text);
-                CalcData.Xmin = Convert.ToDouble(t_xmin.Text);
-                CalcData.Dx = Convert.ToDouble(t_dx.Text);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                b_start_calc.Focus();
-            }
+            CalcTO dataTO = new CalcTO();
 
-            await openCalcForm();
+                try
+                {
+                    dataTO.Xmax = Convert.ToDouble(t_xmax.Text);
+                    dataTO.Xmin = Convert.ToDouble(t_xmin.Text);
+                    dataTO.Dx = Convert.ToDouble(t_dx.Text);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    b_start_calc.Focus();
+                }
+
+            data.setData(dataTO);
+
+            data.setDict(openCalcForm(dataTO));
+            Size = new System.Drawing.Size(648, 305);
 
             l_firstFuncText.Visible = true;
             l_secFuncText.Visible = true;
@@ -131,45 +155,112 @@ namespace MyProject
             //    }
             //}
 
-            var firstExpr = CalcData.FirstExpr;
-            var secExpr = CalcData.SecExpr;
+            //var firstExpr = CalcData.FirstExpr;
+            //var secExpr = CalcData.SecExpr;
 
-            foreach (KeyValuePair<double, double> keyValue in firstExpr)
+            foreach (KeyValuePair<double, double> keyValue in data.FirstExpr)
             {
                 l_firstFuncText.Items.Add(String.Format("x = {0:f2}, f(x) = {1:f2}", keyValue.Key, keyValue.Value));
             }
 
-            foreach (KeyValuePair<double, double> keyValue in secExpr)
+            foreach (KeyValuePair<double, double> keyValue in data.SecExpr)
             {
                 l_secFuncText.Items.Add(String.Format("x = {0:f2}, f(x) = {1:f2}", keyValue.Key, keyValue.Value));
             }
 
         }
 
-        private static async Task openCalcForm()
+        private CalcDictTO openCalcForm(CalcTO inputData)
         {
-            bool isFormOpened = false;
+            // bool isFormOpened = false;
             FormCollection fc = Application.OpenForms;
             //b_start_calc.Enabled = false;
 
-            await Task.Run(() =>
-            {
-                foreach (Form frm in fc)
-                {
-                    if (frm.Name == "calc")
-                    {
-                        isFormOpened = true;
-                    }
-                }
-            });
+            //await Task.Run(() =>
+            //{
+            //    foreach (Form frm in fc)
+            //    {
+            //        if (frm.Name == "calc")
+            //        {
+            //            isFormOpened = true;
+            //        }
+            //    }
+            //});
 
-            if (!isFormOpened)
+            //if (!isFormOpened)
+            //{
+            //    calc cl = new calc();
+            //    cl.ShowDialog();
+            //}
+
+            calc c1 = new calc(inputData);
+            c1.ShowDialog();
+
+            var outputData = c1.getDictTO();
+            return outputData;
+        }
+        private SaveData convertCalcDatatoSaveData(CalcData inputdata)
+        {
+            SaveData sdata = new SaveData();
+            sdata.Xmax = inputdata.Xmax;
+            sdata.Xmin = inputdata.Xmin;
+            sdata.Dx = inputdata.Dx;
+
+            double[] arrF1 = new double[inputdata.FirstExpr.Count];
+            double[] arrF2 = new double[inputdata.SecExpr.Count];
+
+            double[] arrX1 = new double[inputdata.FirstExpr.Count];
+            double[] arrX2 = new double[inputdata.SecExpr.Count];
+
+            int i = 0;
+
+            foreach (KeyValuePair<double, double> keyValue in data.FirstExpr)
             {
-                calc cl = new calc();
-                cl.ShowDialog();
+                arrF1[i] = keyValue.Value;
+                arrX1[i] = keyValue.Key;
+                i++;
             }
+            i = 0;
+            foreach (KeyValuePair<double, double> keyValue in data.SecExpr)
+            {
+                arrF2[i] = keyValue.Value;
+                arrX2[i] = keyValue.Key;
+                i++;
+            }
+
+            sdata.firstArrX = arrX1;
+            sdata.secArrX = arrX2;
+            sdata.firstArrFunc = arrF1;
+            sdata.secArrFunc = arrF2;
+
+            return sdata;
         }
 
+        private CalcData convertSaveData2CalcData(SaveData inputdata)
+        {
+            CalcData sdata = new CalcData();
+
+            sdata.Xmax = inputdata.Xmax;
+            sdata.Xmin = inputdata.Xmin;
+            sdata.Dx = inputdata.Dx;
+
+            var firstExpr = new Dictionary<double, double>();
+            var secExpr = new Dictionary<double, double>();
+
+
+            for (int i = 0; i < inputdata.firstArrFunc.Length; i++)
+            {
+                firstExpr.Add(inputdata.firstArrX[i], inputdata.firstArrFunc[i]);
+            }
+            for (int i = 0; i < inputdata.secArrFunc.Length; i++)
+            {
+                secExpr.Add(inputdata.secArrX[i], inputdata.secArrFunc[i]);
+            }
+            sdata.FirstExpr = firstExpr;
+            sdata.SecExpr = secExpr;
+
+            return sdata;
+        }
 
         private void t_xmin_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -264,6 +355,7 @@ namespace MyProject
         private void t_dx_TextChanged(object sender, EventArgs e)
         {
             IsEmpty(t_dx);
+
         }
 
         private void IsEmpty(TextBox tx)
@@ -323,16 +415,23 @@ namespace MyProject
         {
 
         }
+        private CalcDictTO convertCalcData2ClcDictTO(CalcData data)
+        {
+            var dict = new CalcDictTO();
+            dict.FirstExpr = data.FirstExpr;
+            dict.SecExpr = data.SecExpr;
+            return dict;
+        }
 
         private void b_showGraph_Click(object sender, EventArgs e)
         {
-            Graph graphfirst = new Graph();
+            Graph graphfirst = new Graph(convertCalcData2ClcDictTO(data));
             graphfirst.Show();
         }
 
         private void b_showSecFuncGraph_Click(object sender, EventArgs e)
         {
-            GraphSec graphsecond = new GraphSec();
+            GraphSec graphsecond = new GraphSec(convertCalcData2ClcDictTO(data));
             graphsecond.Show();
         }
 
@@ -382,22 +481,31 @@ namespace MyProject
             t_dx.Text = $"0{separator}2";
         }
 
-        private void m_savetofile_Click(object sender, EventArgs e)
+        private  void m_savetofile_Click(object sender, EventArgs e)
         {
             if (saveFileDialog1.ShowDialog() == DialogResult.Cancel)
                 return;
 
             string filename = saveFileDialog1.FileName;
-            MessageBox.Show(filename);
 
-            var save = new SaveData();
+            SaveData sdat = new SaveData();
+            sdat = convertCalcDatatoSaveData(data);
             using (var stream = new FileStream(filename, FileMode.Create))
             {
                 var serializer = new XmlSerializer(typeof(SaveData));
-                serializer.Serialize(stream, save);
+                serializer.Serialize(stream, sdat);
 
                 MessageBox.Show("Saved to file!");
             }
+
+
+            //MessageBox.Show($"{sdat.firstArrFunc.Length} {sdat.firstArrFunc[1]}");
+
+            //using (FileStream fs = new FileStream(filename, FileMode.OpenOrCreate))
+            //{
+            //    await JsonSerializer.SerializeAsync<SaveData>(fs, sdat);
+            //}
+
         }
 
         private void m_loadfromfile_Click(object sender, EventArgs e)
@@ -417,57 +525,18 @@ namespace MyProject
                 MessageBox.Show("Loaded from file!");
             }
 
-            CalcData.Dx = upload.Dx;
-            CalcData.Xmax = upload.Xmax;
-            CalcData.Xmin = upload.Xmin;
-            CalcData.FirstExprArr = upload.FirstExprArr;
-            CalcData.SecExprArr = upload.SecExprArr;
-            CalcData.QValueArr = upload.QValueArr;
+            data = convertSaveData2CalcData(upload);
 
-            var firstExpr = new Dictionary<double, double>();
-            var secExpr = new Dictionary<double, double>();
-
-            int countSExpr = 0, countFExpr = 0, countq = 0;
-            Double xmin = upload.Xmin;
-            Double dx = upload.Dx;
-            Double xmax = upload.Xmax;
-
-
-            for (;xmin < xmax; xmin += dx)
-            {
-
-                if (upload.QValueArr[countq] <= 0.25)
-                {
-                    if (!Double.IsNaN(upload.FirstExprArr[countFExpr]) && !Double.IsInfinity(upload.FirstExprArr[countFExpr]))
-                    {
-                        firstExpr.Add(xmin, upload.FirstExprArr[countFExpr]);
-                    }
-                    countFExpr++;
-
-                }
-                else
-                {
-                    if (!Double.IsNaN(upload.SecExprArr[countSExpr]) && !Double.IsInfinity(upload.SecExprArr[countSExpr]))
-                    {
-                        secExpr.Add(xmin, upload.SecExprArr[countSExpr]);
-                    }
-                    countSExpr++;
-                }
-                countq++;
-            }
-
-            foreach (KeyValuePair<double, double> keyValue in firstExpr)
+            foreach (KeyValuePair<double, double> keyValue in data.FirstExpr)
             {
                 l_firstFuncText.Items.Add(String.Format("x = {0:f2}, f(x) = {1:f2}", keyValue.Key, keyValue.Value));
             }
 
-            foreach (KeyValuePair<double, double> keyValue in secExpr)
+            foreach (KeyValuePair<double, double> keyValue in data.SecExpr)
             {
                 l_secFuncText.Items.Add(String.Format("x = {0:f2}, f(x) = {1:f2}", keyValue.Key, keyValue.Value));
             }
 
-            CalcData.FirstExpr = firstExpr;
-            CalcData.SecExpr = secExpr;
             t_dx.Text = upload.Dx.ToString();
             t_xmax.Text = upload.Xmax.ToString();
             t_xmin.Text = upload.Xmin.ToString();
@@ -478,6 +547,19 @@ namespace MyProject
             p_f1.Visible = true;
             p_f2.Visible = true;
 
+        }
+
+        private void t_xmin_Leave(object sender, EventArgs e)
+        {
+
+        }
+
+        private void t_xmax_Leave(object sender, EventArgs e)
+        {
+            if (Convert.ToDouble(t_xmin.Text) >= Convert.ToDouble(t_xmax.Text))
+            {
+                MessageBox.Show("If x max < or = x mix we cannot tabulate functions. Please enter valid data!");
+            }
         }
     }
 }
