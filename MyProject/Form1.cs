@@ -20,6 +20,7 @@ namespace MyProject
         private const string APP_NAME = "My Program";
         private char separator = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalSeparator[0];
         private CalcData data = new CalcData();
+        private bool isResazed = false;
 
 
         public Form1()
@@ -106,22 +107,27 @@ namespace MyProject
 
             CalcTO dataTO = new CalcTO();
 
-                try
-                {
-                    dataTO.Xmax = Convert.ToDouble(t_xmax.Text);
-                    dataTO.Xmin = Convert.ToDouble(t_xmin.Text);
-                    dataTO.Dx = Convert.ToDouble(t_dx.Text);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                    b_start_calc.Focus();
-                }
+            try
+            {
+                dataTO.Xmax = Convert.ToDouble(t_xmax.Text);
+                dataTO.Xmin = Convert.ToDouble(t_xmin.Text);
+                dataTO.Dx = Convert.ToDouble(t_dx.Text);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                b_start_calc.Focus();
+            }
 
             data.setData(dataTO);
 
             data.setDict(openCalcForm(dataTO));
-            Size = new System.Drawing.Size(648, 305);
+
+            if (!isResazed)
+            {
+                Size = new System.Drawing.Size(648, 305);
+                isResazed = true;
+            }
 
             l_firstFuncText.Visible = true;
             l_secFuncText.Visible = true;
@@ -244,20 +250,20 @@ namespace MyProject
             sdata.Xmin = inputdata.Xmin;
             sdata.Dx = inputdata.Dx;
 
-            var firstExpr = new Dictionary<double, double>();
-            var secExpr = new Dictionary<double, double>();
+            var t_firstExpr = new Dictionary<double, double>();
+            var t_secExpr = new Dictionary<double, double>();
 
 
             for (int i = 0; i < inputdata.firstArrFunc.Length; i++)
             {
-                firstExpr.Add(inputdata.firstArrX[i], inputdata.firstArrFunc[i]);
+                t_firstExpr.Add(inputdata.firstArrX[i], inputdata.firstArrFunc[i]);
             }
             for (int i = 0; i < inputdata.secArrFunc.Length; i++)
             {
-                secExpr.Add(inputdata.secArrX[i], inputdata.secArrFunc[i]);
+                t_secExpr.Add(inputdata.secArrX[i], inputdata.secArrFunc[i]);
             }
-            sdata.FirstExpr = firstExpr;
-            sdata.SecExpr = secExpr;
+            sdata.FirstExpr = t_firstExpr;
+            sdata.SecExpr = t_secExpr;
 
             return sdata;
         }
@@ -450,7 +456,7 @@ namespace MyProject
         {
             if (colorDialog1.ShowDialog() == DialogResult.Cancel)
                 return;
-            this.BackColor = colorDialog1.Color;
+            BackColor = colorDialog1.Color;
         }
 
         private void objectsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -469,6 +475,7 @@ namespace MyProject
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Size = new System.Drawing.Size(277, 293);
 
             l_firstFuncText.Visible = false;
             l_secFuncText.Visible = false;
@@ -479,9 +486,10 @@ namespace MyProject
             t_xmin.Text = $"-5{separator}0";
             t_xmax.Text = $"0{separator}0";
             t_dx.Text = $"0{separator}2";
+
         }
 
-        private  void m_savetofile_Click(object sender, EventArgs e)
+        private void m_savetofile_Click(object sender, EventArgs e)
         {
             if (saveFileDialog1.ShowDialog() == DialogResult.Cancel)
                 return;
@@ -521,11 +529,12 @@ namespace MyProject
             {
                 var serializer = new XmlSerializer(typeof(SaveData));
                 upload = serializer.Deserialize(stream) as SaveData;
-
-                MessageBox.Show("Loaded from file!");
             }
 
             data = convertSaveData2CalcData(upload);
+            l_firstFuncText.Items.Clear();
+            l_secFuncText.Items.Clear();
+
 
             foreach (KeyValuePair<double, double> keyValue in data.FirstExpr)
             {
@@ -547,6 +556,15 @@ namespace MyProject
             p_f1.Visible = true;
             p_f2.Visible = true;
 
+            if (!isResazed)
+            {
+                Size = new System.Drawing.Size(648, 305);
+                isResazed = true;
+            }
+
+            MessageBox.Show("Loaded from file!");
+
+
         }
 
         private void t_xmin_Leave(object sender, EventArgs e)
@@ -560,6 +578,11 @@ namespace MyProject
             {
                 MessageBox.Show("If x max < or = x mix we cannot tabulate functions. Please enter valid data!");
             }
+        }
+
+        private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {
+
         }
     }
 }
